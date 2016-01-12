@@ -1,2 +1,1 @@
-# grabCourseShell
-shell
+强智教学系统，你个垃圾...
