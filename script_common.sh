@@ -45,7 +45,7 @@ curl -b "./cookie_file/"$file_name".txt" "http://jxgl.gdufs.edu.cn/jsxsd/xsxk/xs
 while true ; do
 for item in ${cn[@]};do
     echo $item
-    curl -b cookie1.txt "http://jxgl.gdufs.edu.cn/jsxsd/xsxkkc/xxxkOper?jx0404id="$item
+    curl -b "./cookie_file/"$file_name".txt" "http://jxgl.gdufs.edu.cn/jsxsd/xsxkkc/xxxkOper?jx0404id="$item
 done
 # python -c "import time;time.sleep(0.05)"; done  # 限速
 done
