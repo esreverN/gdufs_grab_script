@@ -6,6 +6,16 @@ stty echo
 
 file_name=$username"_"`date +%s`
 
+# mkdir if not found
+if [ ! -d "./cookie_file" ];then
+    mkdir cookie_file
+    chmod 777 cookie_file
+fi
+if [ ! -d "./course_json" ];then
+    mkdir course_json
+    chmod 777 course_json
+fi
+
 curl -c "./cookie_file/"$file_name".txt" -d "USERNAME=$username&PASSWORD=$password" http://jxgl.gdufs.edu.cn/jsxsd/xk/LoginToXkLdap
 curl -b "./cookie_file/"$file_name".txt" "http://jxgl.gdufs.edu.cn/jsxsd/xsxk/xsxk_index?jx0502zbid=425DF1EBE9644E6297C4D54B3EAD7A93"
 curl -b "./cookie_file/"$file_name".txt" http://jxgl.gdufs.edu.cn/jsxsd/xsxkkc/xsxkXxxk > "./course_json/"$file_name".txt"
