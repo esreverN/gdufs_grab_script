@@ -39,9 +39,6 @@ cn[$t]=$temp
 t=$(($t+1))
 done
 
-# 这里好像要重新登陆一次，不然会出错...
-curl -c "./cookie_file/"$file_name".txt" -d "USERNAME=$username&PASSWORD=$password" http://jxgl.gdufs.edu.cn/jsxsd/xk/LoginToXkLdap
-curl -b "./cookie_file/"$file_name".txt" "http://jxgl.gdufs.edu.cn/jsxsd/xsxk/xsxk_index?jx0502zbid=425DF1EBE9644E6297C4D54B3EAD7A93"
 while true ; do
 for item in ${cn[@]};do
     echo $item
