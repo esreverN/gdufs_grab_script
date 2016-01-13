@@ -9,3 +9,7 @@
 
 #---------------Pycharm------------
 .idea/
+
+#---------------temp log----------------
+cookie_file/*.txt
+course_json/*.txt

@@ -4,12 +4,19 @@ stty -echo
 read -p "password:" password
 stty echo
 
-curl -c cookie1.txt -d "USERNAME=$username&PASSWORD=$password" http://jxgl.gdufs.edu.cn/jsxsd/xk/LoginToXkLdap
-curl -b cookie1.txt "http://jxgl.gdufs.edu.cn/jsxsd/xsxk/xsxk_index?jx0502zbid=425DF1EBE9644E6297C4D54B3EAD7A93"
+file_name=$username"_"`date +%s`
+
+curl -c "./cookie_file/"$file_name".txt" -d "USERNAME=$username&PASSWORD=$password" http://jxgl.gdufs.edu.cn/jsxsd/xk/LoginToXkLdap
+curl -b "./cookie_file/"$file_name".txt" "http://jxgl.gdufs.edu.cn/jsxsd/xsxk/xsxk_index?jx0502zbid=425DF1EBE9644E6297C4D54B3EAD7A93"
+curl -b "./cookie_file/"$file_name".txt" http://jxgl.gdufs.edu.cn/jsxsd/xsxkkc/xsxkXxxk > "./course_json/"$file_name".txt"
+
+sed -i 's/\r//g' "./course_json/"$file_name".txt" # 过滤^M
+
+python JsonProcess.py -i "./course_json/"$file_name".txt" -o "./course_json/"$file_name"_dump.txt"
 
 echo "请选择需要选的课程编号："
 
-sed 's/20152016[0-9]*//g' course.dump
+sed 's/20152016[0-9]*//g' "./course_json/"$file_name"_dump.txt"
 
 read line
 declare -a cn
@@ -17,14 +24,18 @@ declare -a cn
 t=0
 for i in $line
 do
-temp=`awk '$1 ~ "^'$i'、" {print $2}' course.dump`
+temp=`awk '$1 ~ "^'$i'、" {print $2}' "./course_json/"$file_name"_dump.txt"`
 cn[$t]=$temp
 t=$(($t+1))
 done
 
+# 这里好像要重新登陆一次，不然会出错...
+curl -c "./cookie_file/"$file_name".txt" -d "USERNAME=$username&PASSWORD=$password" http://jxgl.gdufs.edu.cn/jsxsd/xk/LoginToXkLdap
+curl -b "./cookie_file/"$file_name".txt" "http://jxgl.gdufs.edu.cn/jsxsd/xsxk/xsxk_index?jx0502zbid=425DF1EBE9644E6297C4D54B3EAD7A93"
 while true ; do
 for item in ${cn[@]};do
     echo $item
     curl -b cookie1.txt "http://jxgl.gdufs.edu.cn/jsxsd/xsxkkc/xxxkOper?jx0404id="$item
 done
-python -c "import time;time.sleep(0.05)"; done
+# python -c "import time;time.sleep(0.05)"; done  # 限速
+done
