@@ -15,6 +15,10 @@ if [ ! -d "./course_json" ];then
     mkdir course_json
     chmod 777 course_json
 fi
+if [ ! -d "./log" ];then
+    mkdir log
+    chmod 777 log
+fi
 
 curl -c "./cookie_file/"$file_name".txt" -d "USERNAME=$username&PASSWORD=$password" http://jxgl.gdufs.edu.cn/jsxsd/xk/LoginToXkLdap
 curl -b "./cookie_file/"$file_name".txt" "http://jxgl.gdufs.edu.cn/jsxsd/xsxk/xsxk_index?jx0502zbid=425DF1EBE9644E6297C4D54B3EAD7A93"
@@ -39,10 +43,11 @@ cn[$t]=$temp
 t=$(($t+1))
 done
 
+(date +%s) >> "log/"$file_name".log"
 while true ; do
 for item in ${cn[@]};do
-    echo $item
-    curl -b "./cookie_file/"$file_name".txt" "http://jxgl.gdufs.edu.cn/jsxsd/xsxkkc/xxxkOper?jx0404id="$item
+    echo -n $item
+    (curl -s -b "./cookie_file/"$file_name".txt" "http://jxgl.gdufs.edu.cn/jsxsd/xsxkkc/xxxkOper?jx0404id="$item) | tee -a "log/"$file_name".log"
 done
-# python -c "import time;time.sleep(0.05)"; done  # 限速
+#python -c "import time;time.sleep(0.02)"  # 限速
 done
