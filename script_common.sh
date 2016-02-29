@@ -21,7 +21,8 @@ if [ ! -d "./log" ];then
 fi
 
 curl -c "./cookie_file/"$file_name".txt" -d "USERNAME=$username&PASSWORD=$password" http://jxgl.gdufs.edu.cn/jsxsd/xk/LoginToXkLdap
-curl -b "./cookie_file/"$file_name".txt" "http://jxgl.gdufs.edu.cn/jsxsd/xsxk/xsxk_index?jx0502zbid=425DF1EBE9644E6297C4D54B3EAD7A93"
+# curl -b "./cookie_file/"$file_name".txt" "http://jxgl.gdufs.edu.cn/jsxsd/xsxk/xsxk_index?jx0502zbid=425DF1EBE9644E6297C4D54B3EAD7A93"
+curl -b "./cookie_file/"$file_name".txt" "http://jxgl.gdufs.edu.cn/jsxsd/xsxk/xsxk_index?jx0502zbid=C1C7822D144E484D8F4AD74A5717C881"
 curl -b "./cookie_file/"$file_name".txt" http://jxgl.gdufs.edu.cn/jsxsd/xsxkkc/xsxkXxxk > "./course_json/"$file_name".txt"
 
 sed -i 's/\r//g' "./course_json/"$file_name".txt" # 过滤^M
