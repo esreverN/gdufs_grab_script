@@ -7,7 +7,7 @@ import lxml.html
 from PIL import Image, ImageEnhance
 import pytesseract
 
-REGISTER_URL = "http://jxgl.gdufs.edu.cn"
+REGISTER_URL = "http://jxgl.gdufs.edu.cn/jsxsd"
 CODE_DIR = "qz_qrcode_img/"
 EXT = ".jpg"
 
