@@ -1,6 +1,5 @@
+#/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-__author__ = 'tyruschin'
 
 # Thanks for http://cuiqingcai.com/968.html
 
