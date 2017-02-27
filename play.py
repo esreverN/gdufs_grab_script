@@ -12,6 +12,9 @@ import json
 import re
 import time
 
+CODE_DIR = "./qz_qrcode_img/"
+EXT = ".jpg"
+
 if not os.path.exists('./cookie_log'):
     os.mkdir('cookie_log')
 if not os.path.exists('./course_log'):
@@ -19,25 +22,30 @@ if not os.path.exists('./course_log'):
 if not os.path.exists('./log'):
     os.mkdir('log')
 
-config.studentInfo['USERNAME'] = raw_input("student number: ")
-config.studentInfo['PASSWORD'] = raw_input("password: ")
-
-log_file = 'log/'+ config.studentInfo['USERNAME'] + str(int(time.time())) +'.txt'
-cookie_file = 'cookie_log/'+ config.studentInfo['USERNAME'] +'.txt'
-output_file = 'course_log/'+ config.studentInfo['USERNAME'] +'_dump.txt'
+log_file = 'log/' + config.studentInfo['USERNAME'] + str(int(time.time())) + '.txt'
+cookie_file = 'cookie_log/' + config.studentInfo['USERNAME'] + '.txt'
+output_file = 'course_log/' + config.studentInfo['USERNAME'] + '_dump.txt'
 
 cookie = cookielib.MozillaCookieJar(cookie_file)
 handler = urllib2.HTTPCookieProcessor(cookie)
 opener = urllib2.build_opener(handler)
+result = opener.open("http://jxgl.gdufs.edu.cn/jsxsd/verifycode.servlet")
+f = open(CODE_DIR + 'origin' + EXT, "wb+")
+f.write(result.read())
+f.close()
+cookie.save(ignore_discard=True, ignore_expires=True)
+config.studentInfo['USERNAME'] = raw_input("student number: ")
+config.studentInfo['PASSWORD'] = raw_input("password: ")
+config.studentInfo['RANDOMCODE'] = raw_input("randomcode: ")
 postData = urllib.urlencode(config.studentInfo)
 loginUrl = 'http://jxgl.gdufs.edu.cn/jsxsd/xk/LoginToXkLdap'
 result = opener.open(loginUrl,postData)
 cookie.save(ignore_discard=True, ignore_expires=True)
 grabUrl = 'http://jxgl.gdufs.edu.cn/jsxsd/xsxk/xsxk_index?'+config.courseCode
-opener.open(grabUrl)
+result = opener.open(grabUrl)
 grabUrl = 'http://jxgl.gdufs.edu.cn/jsxsd/xsxkkc/xsxkXxxk'  # 通选课好像不是这个
 courseList = opener.open(grabUrl)
-courseList =  str(courseList.read())
+courseList = str(courseList.read())
 courseList.replace('\r','')
 courseContent = ""
 json_str = courseList

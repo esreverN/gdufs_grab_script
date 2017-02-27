@@ -3,6 +3,6 @@ studentInfo = {
     'USERNAME':'',
     'PASSWORD':''
 }
-courseCode = 'jx0502zbid=6AD1AA28D7FF4F25A58710392D4B1431'   # 院系通选课
+courseCode = 'jx0502zbid=0B2F353D2507431F9D45F18AA941AFE0'   # 院系通选课
 
 
