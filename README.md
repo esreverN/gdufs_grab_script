@@ -6,6 +6,10 @@
 
 ## 使用方法
 
+> 在根目录下clone`cracker`模块，`git@github.com:TyrusChin/qz_vcode_cracker.git`
+
+> 安装`PIL`库
+
 > `python play.py` 按提示输入，遇到等待不要操作，正在运行..
 
 ## 正常运行显示结果
