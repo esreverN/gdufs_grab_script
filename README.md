@@ -4,9 +4,11 @@
 
 `2017-03-01` 自动识别验证码并登陆，依赖`PIL`库。[安装方法](http://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/00140767171357714f87a053a824ffd811d98a83b58ec13000)
 
-## 使用方法
+## 旧版(不能识别验证码，但是不需要PIL库)
 
-> 在根目录下clone`cracker`模块，`git@github.com:TyrusChin/qz_vcode_cracker.git`
+[摸我](https://github.com/TyrusChin/gdufs_grab_script/tree/python_without_pil)
+
+## 使用方法
 
 > 安装`PIL`库
 
