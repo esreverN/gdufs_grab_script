@@ -11,9 +11,12 @@ import config
 import json
 import re
 import time
+from PIL import Image
+from qz_vcode_cracker import cracker
 
-CODE_DIR = "./qz_qrcode_img/"
+CODE_DIR = "./qz_vcode_img/"
 EXT = ".jpg"
+CRACKER_BASEDIR = 'qz_vcode_cracker/'
 
 if not os.path.exists('./cookie_log'):
     os.mkdir('cookie_log')
@@ -29,28 +32,41 @@ output_file = 'course_log/' + config.studentInfo['USERNAME'] + '_dump.txt'
 cookie = cookielib.MozillaCookieJar(cookie_file)
 handler = urllib2.HTTPCookieProcessor(cookie)
 opener = urllib2.build_opener(handler)
-result = opener.open("http://jxgl.gdufs.edu.cn/jsxsd/verifycode.servlet")
-f = open(CODE_DIR + 'origin' + EXT, "wb+")
-f.write(result.read())
-f.close()
-cookie.save(ignore_discard=True, ignore_expires=True)
 config.studentInfo['USERNAME'] = raw_input("student number: ")
 config.studentInfo['PASSWORD'] = raw_input("password: ")
-config.studentInfo['RANDOMCODE'] = raw_input("randomcode: ")
-postData = urllib.urlencode(config.studentInfo)
-loginUrl = 'http://jxgl.gdufs.edu.cn/jsxsd/xk/LoginToXkLdap'
-result = opener.open(loginUrl,postData)
-cookie.save(ignore_discard=True, ignore_expires=True)
-grabUrl = 'http://jxgl.gdufs.edu.cn/jsxsd/xsxk/xsxk_index?'+config.courseCode
-result = opener.open(grabUrl)
-grabUrl = 'http://jxgl.gdufs.edu.cn/jsxsd/xsxkkc/xsxkXxxk'  # 通选课好像不是这个
-courseList = opener.open(grabUrl)
-courseList = str(courseList.read())
-courseList.replace('\r','')
-courseContent = ""
-json_str = courseList
-# print json_str
-dict1 = json.loads(json_str)
+login = False
+while not login:
+    result = opener.open("http://jxgl.gdufs.edu.cn/jsxsd/verifycode.servlet")
+    f = open(CODE_DIR + 'origin' + EXT, "wb+")
+    f.write(result.read())
+    f.close()
+    img = Image.open(CODE_DIR + 'origin' + EXT)
+    img = cracker.pre(img)
+    img = cracker.denoise(img)
+    letters = cracker.get_x_cut_points(img)
+    res = cracker.cracker(img, letters, CRACKER_BASEDIR)
+    if len(res) != 4:
+        continue
+    config.studentInfo['RANDOMCODE'] = res
+    cookie.save(ignore_discard=True, ignore_expires=True)
+    postData = urllib.urlencode(config.studentInfo)
+    loginUrl = 'http://jxgl.gdufs.edu.cn/jsxsd/xk/LoginToXkLdap'
+    result = opener.open(loginUrl,postData)
+    cookie.save(ignore_discard=True, ignore_expires=True)
+    grabUrl = 'http://jxgl.gdufs.edu.cn/jsxsd/xsxk/xsxk_index?'+config.courseCode
+    result = opener.open(grabUrl)
+    grabUrl = 'http://jxgl.gdufs.edu.cn/jsxsd/xsxkkc/xsxkXxxk'  # 通选课好像不是这个
+    courseList = opener.open(grabUrl)
+    courseList = str(courseList.read())
+    courseList.replace('\r','')
+    courseContent = ""
+    json_str = courseList
+    try:
+        dict1 = json.loads(json_str)
+    except:
+        print "验证码识别错误,正在重新识别"
+    else:
+        login = True
 i = 1
 for row in dict1['aaData']:
     if row['skls'] is None:
