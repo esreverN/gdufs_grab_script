@@ -16,3 +16,6 @@ course_json/*.txt
 log/
 mypwd/
 .DS_Store
+
+# python
+*.pyc

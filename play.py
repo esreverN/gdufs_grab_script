@@ -12,7 +12,7 @@ import json
 import re
 import time
 
-CODE_DIR = "./qz_qrcode_img/"
+CODE_DIR = "./qz_vcode_img/"
 EXT = ".jpg"
 
 if not os.path.exists('./cookie_log'):
